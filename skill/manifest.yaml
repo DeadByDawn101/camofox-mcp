@@ -1,5 +1,5 @@
 name: camofox-mcp
-version: 1.14.1
+version: 1.14.2
 description: Anti-detection browser MCP server for AI agents — navigate, interact, and automate the web without getting blocked
 author: redf0x1
 license: MIT
@@ -22,17 +22,17 @@ server:
 prerequisites:
   - name: CamoFox Browser
     required: true
-    description: CamoFox Browser server must be running (default http://localhost:9377)
+    description: CamoFox Browser server 2.4.4+ must be running (default http://localhost:9377)
   - name: Start command
     required: true
-    description: Start MCP server in HTTP mode with CAMOFOX_TRANSPORT=http npx camofox-mcp@1.14.1
+    description: Start MCP server in HTTP mode with CAMOFOX_TRANSPORT=http npx camofox-mcp@1.14.2
 
 tools:
   - name: server_status
     description: Check CamoFox server health and browser connection.
 
   - name: create_tab
-    description: Create a new anti-detection browser tab with optional URL, session, proxy, and geo settings.
+    description: Create a new anti-detection browser tab with optional URL, session, viewport, proxy, and geo settings. Use userId cli-default plus sessionKey default to share the camofox CLI default context; this does not attach to an already-open CLI tab.
   - name: close_tab
     description: Close a browser tab and release resources.
   - name: list_tabs

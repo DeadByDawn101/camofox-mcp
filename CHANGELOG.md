@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.14.2] - 2026-05-23
+
+### Compatibility
+- Recommend `camofox-browser` `2.4.4` or newer. Browser `2.4.4` fixes the persistent-context cold-start `about:blank` page reuse path, preventing a second window when opening the first tab through CLI or MCP.
+
+### Changed
+- Clarified `create_tab` guidance for sharing the camofox CLI default browser context with `userId: "cli-default"` and `sessionKey: "default"`.
+- Clarified that MCP can create a tracked tab in that shared context but cannot reliably attach to a tab that the CLI already opened.
+- Documented viewport/display-size control for wide headed windows, including `{ "width": 1366, "height": 768 }`.
+
+### Security
+- Updated the transitive runtime `qs` lockfile entry to `6.15.2` so `npm audit --audit-level=moderate` reports zero vulnerabilities.
+
 ## [1.14.1] - 2026-05-13
 
 ### Compatibility

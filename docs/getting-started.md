@@ -6,7 +6,7 @@ Use this guide to install CamoFox MCP, connect it to `camofox-browser`, verify t
 
 - Node.js 18 or newer for `npx` and local development.
 - Docker if you prefer container-based setup.
-- A running `camofox-browser` server.
+- A running `camofox-browser` server. Use `camofox-browser` `2.4.4` or newer so the first opened tab reuses the browser's initial blank page instead of leaving an extra empty window.
 - An MCP-compatible client such as Claude Desktop, VS Code, Cursor, or OpenClaw.
 - `CAMOFOX_API_KEY` only if your browser server is configured to require authentication.
 
@@ -82,6 +82,23 @@ These are the environment variables most users need first.
 | `CAMOFOX_HTTP_RATE_LIMIT` | `60` | No | Request-per-minute limit for HTTP mode. |
 | `CAMOFOX_HTTP_API_KEY` | none | Required for non-loopback HTTP bind | Inbound HTTP MCP Bearer token. Use at least 32 random characters. |
 | `CAMOFOX_HTTP_ALLOWED_HOSTS` | none | No | Comma-separated Host header allowlist for HTTP transport. |
+
+## CLI and MCP Session Sharing
+
+The camofox CLI default session uses `userId: "cli-default"` and `sessionKey: "default"`.
+
+CamoFox MCP defaults `CAMOFOX_DEFAULT_USER_ID` to `default`, and `create_tab` creates a new random `sessionKey` unless one is provided. To create an MCP-tracked tab in the same browser profile/context as the camofox CLI default session, pass both values explicitly:
+
+```json
+{
+  "url": "http://localhost:8085",
+  "userId": "cli-default",
+  "sessionKey": "default",
+  "viewport": { "width": 1366, "height": 768 }
+}
+```
+
+This shares the browser context/profile, but it does not reliably attach MCP to a tab that the CLI already opened. Importing or adopting existing CLI tabs is future work. The `viewport` field controls the browser viewport/display size and is the supported way to avoid unexpectedly wide headed windows.
 
 ## Client Configuration
 

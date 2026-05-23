@@ -2,6 +2,13 @@
 
 All notable changes to this ClawHub skill package will be documented in this file.
 
+## [1.14.2] - 2026-05-23
+
+- Updated package metadata from 1.14.1 to 1.14.2.
+- Updated compatibility guidance to require `camofox-browser` 2.4.4+ for first-tab persistent-context reuse.
+- Clarified `create_tab` guidance for camofox CLI default context sharing with `userId: "cli-default"` and `sessionKey: "default"`, including the current limitation that MCP does not attach to an already-open CLI tab.
+- Added viewport/display-size guidance for headed windows.
+
 ## [1.14.1] - 2026-05-13
 
 - Updated package metadata from 1.14.0 to 1.14.1.

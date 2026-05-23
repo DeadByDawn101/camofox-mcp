@@ -29,21 +29,27 @@ function parseToolTextJson(result: ToolResult): any {
 
 function makeServerCapture(): {
   server: { tool: ReturnType<typeof vi.fn> };
+  getToolCall: (name: string) => unknown[];
   getHandler: (name: string) => (input: unknown) => Promise<ToolResult>;
 } {
   const server = {
     tool: vi.fn()
   };
 
-  const getHandler = (name: string) => {
+  const getToolCall = (name: string) => {
     const call = server.tool.mock.calls.find((c) => c[0] === name);
     if (!call) {
       throw new Error(`Expected tool '${name}' to be registered`);
     }
+    return call as unknown[];
+  };
+
+  const getHandler = (name: string) => {
+    const call = getToolCall(name);
     return call[3] as (input: unknown) => Promise<ToolResult>;
   };
 
-  return { server, getHandler };
+  return { server, getToolCall, getHandler };
 }
 
 function makeTab(tabId: string, overrides: Partial<TabInfo> = {}): TabInfo {
@@ -99,6 +105,23 @@ describe("tools/tabs", () => {
   });
 
   describe("create_tab", () => {
+    it("documents CLI context reuse and viewport guidance in tool metadata", () => {
+      const { server, getToolCall } = makeServerCapture();
+      registerTabsTools(server as unknown as Parameters<typeof registerTabsTools>[0], deps);
+
+      const call = getToolCall("create_tab");
+      const description = call[1] as string;
+      const schema = call[2] as Record<string, { description?: string }>;
+
+      expect(description).toContain("userId \"cli-default\" and sessionKey \"default\"");
+      expect(description).toMatch(/does not attach to a CLI tab that is already open/i);
+      expect(schema.userId.description).toContain('"cli-default"');
+      expect(schema.sessionKey.description).toContain('"default"');
+      expect(schema.sessionKey.description).toMatch(/does not attach/i);
+      expect(schema.viewport.description).toContain('"width": 1366');
+      expect(schema.viewport.description).toContain('"height": 768');
+    });
+
     it("basic create without auto-load (no apiKey)", async () => {
       deps.config.autoSave = false;
       vi.mocked(deps.client.createTab).mockResolvedValue({ tabId: "tab-basic", url: "http://example.com" });
@@ -141,6 +164,7 @@ describe("tools/tabs", () => {
           username: "alice",
           password: "secret"
         },
+        viewport: { width: 1366, height: 768 },
         geoMode: "proxy-locked"
       });
 
@@ -158,6 +182,7 @@ describe("tools/tabs", () => {
             username: "alice",
             password: "secret"
           },
+          viewport: { width: 1366, height: 768 },
           geoMode: "proxy-locked"
         })
       );

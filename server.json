@@ -7,15 +7,15 @@
     "source": "github"
   },
   "version_detail": {
-    "version": "1.14.1",
-    "release_date": "2026-05-13",
+    "version": "1.14.2",
+    "release_date": "2026-05-23",
     "is_stable": true
   },
   "packages": [
     {
       "registry_name": "npm",
       "name": "camofox-mcp",
-      "version": "1.14.1",
+      "version": "1.14.2",
       "runtime": "node",
       "runtime_arguments": [],
       "package_arguments": [],
@@ -95,7 +95,7 @@
     {"name": "camofox_wait_for_text", "description": "Wait for specific text to appear on the page. Useful for waiting for search results, form submissions, or dynamic content loading.", "inputSchema": {"type": "object", "properties": {"tabId": {"type": "string", "description": "Tab ID"}, "text": {"type": "string", "description": "Text to wait for"}, "timeout": {"type": "number", "description": "Timeout in ms (default: 10000)"}}, "required": ["tabId", "text"], "additionalProperties": false}},
     {"name": "click", "description": "Click an element. Provide either ref (from snapshot) or CSS selector. Use snapshot first to discover element refs."},
     {"name": "close_tab", "description": "Close a browser tab and release resources. Always close tabs when done to free memory."},
-    {"name": "create_tab", "description": "Create a new browser tab with anti-detection fingerprinting. Supports URL, user/session isolation, geo overrides, proxyProfile/raw proxy, and geoMode. Returns the tab ID for subsequent operations."},
+    {"name": "create_tab", "description": "Create a new browser tab with anti-detection fingerprinting. Supports URL, user/session isolation, viewport/display size, geo overrides, proxyProfile/raw proxy, and geoMode. To share the camofox CLI default browser profile/context, pass userId \"cli-default\" and sessionKey \"default\"; this creates a tracked MCP tab in that context but does not attach to a CLI tab that is already open."},
     {"name": "delete_download", "description": "Delete a downloaded file from disk and registry"},
     {"name": "fill_form", "description": "Fill multiple form fields in one call. Provide an array of field entries, each with a ref or CSS selector and the text to type. Optionally specify a submit button to click after filling."},
     {"name": "batch_download", "description": "Extract resources from a DOM container and download them all. Combines extract_resources + download in one call. Useful for downloading all images from a chat, all PDFs from a table, etc."},

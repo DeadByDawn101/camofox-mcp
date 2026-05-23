@@ -71,6 +71,8 @@ Full client configuration examples live in [docs/getting-started.md](docs/gettin
 
 ## Quick Verify
 
+Use `camofox-browser` `2.4.4` or newer. That browser release fixes the persistent-context cold-start `about:blank` page reuse path, so opening the first tab should not leave an extra empty window.
+
 Verify the browser server is reachable:
 
 ```bash
@@ -100,6 +102,8 @@ On a cold server with no active tabs yet, `browserConnected` can be `false`; cre
 ## Top Limitations
 
 - CamoFox MCP is not a standalone browser. You must run a compatible `camofox-browser` server separately.
+- MCP can share the camofox CLI default browser profile/context when `create_tab` uses `userId: "cli-default"` and `sessionKey: "default"`, but it cannot reliably attach to a tab the CLI already opened. Importing/adopting existing CLI tabs is a future feature.
+- Headed browser window size follows browser viewport/display-size behavior. Pass `viewport`, for example `{ "width": 1366, "height": 768 }`, when a narrower window is needed.
 - Accessibility-tree refs are the primary interaction model, but SPA and custom-component sites can require CSS selectors or rendered HTML tools.
 - If the browser server enforces authentication, API-key-gated operations need the same `CAMOFOX_API_KEY` on both sides.
 - If HTTP transport is exposed beyond loopback, set `CAMOFOX_HTTP_API_KEY` and require clients to send it as a Bearer token.

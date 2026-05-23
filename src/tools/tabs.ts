@@ -27,11 +27,11 @@ const geoModeSchema = z.enum(["explicit-wins", "proxy-locked"]).describe(
 export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
   server.tool(
     "create_tab",
-    "Create a new browser tab with anti-detection fingerprinting. Each tab gets a unique fingerprint. Optionally provide a URL and userId for session isolation. Returns the tab ID for subsequent operations.",
+    "Create a new browser tab with anti-detection fingerprinting. Each tab gets a unique fingerprint. Optionally provide a URL, userId, sessionKey, and viewport. To share the camofox CLI default browser profile/context, pass userId \"cli-default\" and sessionKey \"default\"; this creates a tracked MCP tab in that context but does not attach to a CLI tab that is already open.",
     {
       url: z.string().url().optional().describe("Full URL including protocol (e.g. 'https://example.com')"),
-      userId: z.string().min(1).optional().describe("User ID for session isolation"),
-      sessionKey: z.string().min(1).optional().describe("Session key for browser context reuse. Defaults to a new unique session."),
+      userId: z.string().min(1).optional().describe('User ID for session isolation. MCP defaults to CAMOFOX_DEFAULT_USER_ID/default; use "cli-default" with sessionKey "default" to share the camofox CLI default context.'),
+      sessionKey: z.string().min(1).optional().describe('Session key for browser context reuse. Defaults to a new unique session; use "default" with userId "cli-default" for the camofox CLI default context. This does not attach to a tab that the CLI already opened.'),
       preset: z.string().optional().describe(
         'Named geo preset (e.g. "us-east", "us-west", "japan", "uk", "germany", "vietnam", "singapore", "australia"). Sets locale, timezone, and geolocation.'
       ),
@@ -50,7 +50,7 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
           height: z.number().int().min(240).max(2160)
         })
         .optional()
-        .describe("Browser viewport size override"),
+        .describe('Browser viewport/display size override. Use this to control wide windows, for example { "width": 1366, "height": 768 }.'),
       proxyProfile: z.string().min(1).optional().describe("Named proxy profile configured in camofox-browser"),
       proxy: rawProxySchema.optional(),
       geoMode: geoModeSchema.optional()
@@ -60,8 +60,8 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
         const parsed = z
           .object({
             url: z.string().url().optional().describe("Full URL including protocol (e.g. 'https://example.com')"),
-            userId: z.string().min(1).optional().describe("User ID for session isolation"),
-            sessionKey: z.string().min(1).optional().describe("Session key for browser context reuse. Defaults to a new unique session."),
+            userId: z.string().min(1).optional().describe('User ID for session isolation. MCP defaults to CAMOFOX_DEFAULT_USER_ID/default; use "cli-default" with sessionKey "default" to share the camofox CLI default context.'),
+            sessionKey: z.string().min(1).optional().describe('Session key for browser context reuse. Defaults to a new unique session; use "default" with userId "cli-default" for the camofox CLI default context. This does not attach to a tab that the CLI already opened.'),
             preset: z.string().optional().describe(
               'Named geo preset (e.g. "us-east", "us-west", "japan", "uk", "germany", "vietnam", "singapore", "australia"). Sets locale, timezone, and geolocation.'
             ),
@@ -80,7 +80,7 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
                   height: z.number().int().min(240).max(2160)
                 })
                 .optional()
-                .describe("Browser viewport size override"),
+                .describe('Browser viewport/display size override. Use this to control wide windows, for example { "width": 1366, "height": 768 }.'),
             proxyProfile: z.string().min(1).optional().describe("Named proxy profile configured in camofox-browser"),
             proxy: rawProxySchema.optional(),
             geoMode: geoModeSchema.optional()

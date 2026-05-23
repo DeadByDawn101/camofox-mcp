@@ -11,7 +11,7 @@ This page is the canonical index for the tools currently registered by `camofox-
 - Primary interaction model: `create_tab` -> `navigate` or `web_search` -> `snapshot` -> interact with refs or CSS selectors
 - Preferred read path: use `snapshot` first, then fall back to CSS-selector and DOM tools when refs are incomplete
 - API key note: tools marked `Yes` call browser-server endpoints that require `CAMOFOX_API_KEY` when the browser server is protected. HTTP transport exposure uses separate inbound `CAMOFOX_HTTP_API_KEY` Bearer authentication.
-- Compatibility note: use `camofox-browser` `2.4.3` or newer when sending `proxyProfile` or raw `proxy`; that browser version applies the resolved session proxy to the browser context launch path.
+- Compatibility note: use `camofox-browser` `2.4.4` or newer. Browser `2.4.3` added session proxy launch support, and browser `2.4.4` fixes first-tab reuse for persistent contexts so a cold `create_tab` call should not leave an extra empty `about:blank` window.
 
 ## Quick Reference
 
@@ -75,7 +75,7 @@ This page is the canonical index for the tools currently registered by `camofox-
 
 | Name | Description | Parameters | Returns | Requires API Key | Example |
 | --- | --- | --- | --- | --- | --- |
-| `create_tab` | Open a new anti-detection tab and start tracking it in MCP state. | `url?: string (URL)`; `userId?: string`; `sessionKey?: string`; `preset?: string`; `locale?: string`; `timezoneId?: string`; `geolocation?: { latitude: number, longitude: number }`; `viewport?: { width: int, height: int }`; `proxyProfile?: string`; `proxy?: { host: string, port: string \| number, username?: string, password?: string }`; `geoMode?: "explicit-wins" \| "proxy-locked"`. | `tabId`, `url`, `userId`, `sessionKey`, `preset`, `autoLoaded`. | No | `create_tab({ url: "https://example.com", proxyProfile: "tokyo-exit", geoMode: "proxy-locked" })` |
+| `create_tab` | Open a new anti-detection tab and start tracking it in MCP state. It can create a tracked MCP tab in the camofox CLI default context when `userId: "cli-default"` and `sessionKey: "default"` are both provided, but it does not reliably attach to an already-open CLI tab. | `url?: string (URL)`; `userId?: string`; `sessionKey?: string`; `preset?: string`; `locale?: string`; `timezoneId?: string`; `geolocation?: { latitude: number, longitude: number }`; `viewport?: { width: int, height: int }`; `proxyProfile?: string`; `proxy?: { host: string, port: string \| number, username?: string, password?: string }`; `geoMode?: "explicit-wins" \| "proxy-locked"`. | `tabId`, `url`, `userId`, `sessionKey`, `preset`, `autoLoaded`. | No | `create_tab({ url: "http://localhost:8085", userId: "cli-default", sessionKey: "default", viewport: { width: 1366, height: 768 } })` |
 | `close_tab` | Close a tracked tab and remove it from local state. | `tabId: string`. | `success`, `tabId`, `autoSaved`, `autoSaveFailure?`. | No | `close_tab({ tabId: "tab_123" })` |
 | `list_tabs` | Show all tracked tabs known to MCP. | None. | Array of tracked tab records including `tabId`, `url`, `userId`, timestamps, counters, and session metadata. | No | `list_tabs({})` |
 
@@ -195,3 +195,20 @@ This page is the canonical index for the tools currently registered by `camofox-
 2. `batch_download`
 3. `list_downloads`
 4. `get_download`
+
+### Share the camofox CLI default context
+
+The camofox CLI default session is `userId: "cli-default"` plus `sessionKey: "default"`. MCP's own default user is `CAMOFOX_DEFAULT_USER_ID` or `default`, and MCP creates a new random session key unless one is supplied.
+
+To share the CLI default browser profile/context, create the MCP tab with both CLI values:
+
+```json
+{
+  "url": "http://localhost:8085",
+  "userId": "cli-default",
+  "sessionKey": "default",
+  "viewport": { "width": 1366, "height": 768 }
+}
+```
+
+This creates and tracks a new MCP tab in the shared context. It is not an attach/import-existing-tab feature for tabs that were already opened by the CLI. Use `viewport` to control headed window/display size when the default window is too wide.
