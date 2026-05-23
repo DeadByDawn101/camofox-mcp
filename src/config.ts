@@ -16,6 +16,7 @@ interface CliArgs {
   httpRateLimit?: number;
   httpApiKey?: string;
   httpAllowedHosts?: string[];
+  defaultViewport?: string;
 }
 
 function parseBoolFlag(raw: string): boolean | undefined {
@@ -37,6 +38,23 @@ function parseCsvList(raw: string | undefined): string[] | undefined {
     .map((value) => value.trim())
     .filter((value) => value.length > 0);
   return values.length > 0 ? values : undefined;
+}
+
+/**
+ * 解析 "WIDTHxHEIGHT" 格式的字串為 viewport 物件
+ * Parse "WIDTHxHEIGHT" format string into viewport object
+ *
+ * @param raw - 原始字串，如 "1280x720" / Raw string, e.g. "1280x720"
+ * @returns viewport 物件或 undefined / viewport object or undefined
+ */
+function parseViewport(raw: string | undefined): { width: number; height: number } | undefined {
+  if (!raw) return undefined;
+  const match = raw.trim().match(/^(\d+)x(\d+)$/);
+  if (!match) return undefined;
+  const width = Number.parseInt(match[1], 10);
+  const height = Number.parseInt(match[2], 10);
+  if (width > 0 && height > 0) return { width, height };
+  return undefined;
 }
 
 export function isLoopbackHost(host: string): boolean {
@@ -174,6 +192,12 @@ function parseCliArgs(argv: string[]): CliArgs {
       i += 1;
       continue;
     }
+
+    if (current === "--viewport" && next) {
+      args.defaultViewport = next;
+      i += 1;
+      continue;
+    }
   }
 
   return args;
@@ -201,7 +225,8 @@ export function loadConfig(argv = process.argv.slice(2), env = process.env): Con
     httpHost: cli.httpHost ?? env.CAMOFOX_HTTP_HOST ?? "127.0.0.1",
     httpRateLimit: cli.httpRateLimit ?? (Number.isNaN(httpRateLimitFromEnv) ? 60 : httpRateLimitFromEnv),
     httpApiKey: cli.httpApiKey ?? normalizeOptionalSecret(env.CAMOFOX_HTTP_API_KEY),
-    httpAllowedHosts: cli.httpAllowedHosts ?? parseCsvList(env.CAMOFOX_HTTP_ALLOWED_HOSTS)
+    httpAllowedHosts: cli.httpAllowedHosts ?? parseCsvList(env.CAMOFOX_HTTP_ALLOWED_HOSTS),
+    defaultViewport: parseViewport(cli.defaultViewport ?? env.CAMOFOX_VIEWPORT)
   };
 
   assertHttpConfigSafe(config);

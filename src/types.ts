@@ -11,6 +11,7 @@ export interface Config {
   httpRateLimit: number;
   httpApiKey?: string;
   httpAllowedHosts?: string[];
+  defaultViewport?: { width: number; height: number };
 }
 
 export interface HealthResponse {

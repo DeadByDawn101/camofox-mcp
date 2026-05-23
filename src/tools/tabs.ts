@@ -97,7 +97,7 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
           locale: parsed.locale,
           timezoneId: parsed.timezoneId,
           geolocation: parsed.geolocation,
-          viewport: parsed.viewport,
+          viewport: parsed.viewport ?? deps.config.defaultViewport,
           proxyProfile: parsed.proxyProfile,
           proxy: parsed.proxy,
           geoMode: parsed.geoMode
