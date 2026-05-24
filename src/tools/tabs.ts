@@ -8,6 +8,12 @@ import { loadProfile, saveProfile, withAutoTimeout } from "../profiles.js";
 import { getTrackedTab, listTrackedTabs, removeTrackedTab, trackTab } from "../state.js";
 import type { ToolDeps } from "../server.js";
 import type { TabInfo } from "../types.js";
+import {
+  VIEWPORT_HEIGHT_MAX,
+  VIEWPORT_HEIGHT_MIN,
+  VIEWPORT_WIDTH_MAX,
+  VIEWPORT_WIDTH_MIN
+} from "../viewport.js";
 
 const AUTO_PROFILE_TIMEOUT_MS = 5_000;
 
@@ -46,8 +52,8 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
         .describe("GPS coordinates override"),
       viewport: z
         .object({
-          width: z.number().int().min(320).max(3840),
-          height: z.number().int().min(240).max(2160)
+          width: z.number().int().min(VIEWPORT_WIDTH_MIN).max(VIEWPORT_WIDTH_MAX),
+          height: z.number().int().min(VIEWPORT_HEIGHT_MIN).max(VIEWPORT_HEIGHT_MAX)
         })
         .optional()
         .describe('Browser viewport/display size override. Use this to control wide windows, for example { "width": 1366, "height": 768 }.'),
@@ -76,11 +82,11 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
               .describe("GPS coordinates override"),
             viewport: z
               .object({
-                width: z.number().int().min(320).max(3840),
-                  height: z.number().int().min(240).max(2160)
-                })
-                .optional()
-                .describe('Browser viewport/display size override. Use this to control wide windows, for example { "width": 1366, "height": 768 }.'),
+                width: z.number().int().min(VIEWPORT_WIDTH_MIN).max(VIEWPORT_WIDTH_MAX),
+                height: z.number().int().min(VIEWPORT_HEIGHT_MIN).max(VIEWPORT_HEIGHT_MAX)
+              })
+              .optional()
+              .describe('Browser viewport/display size override. Use this to control wide windows, for example { "width": 1366, "height": 768 }.'),
             proxyProfile: z.string().min(1).optional().describe("Named proxy profile configured in camofox-browser"),
             proxy: rawProxySchema.optional(),
             geoMode: geoModeSchema.optional()
@@ -97,7 +103,7 @@ export function registerTabsTools(server: McpServer, deps: ToolDeps): void {
           locale: parsed.locale,
           timezoneId: parsed.timezoneId,
           geolocation: parsed.geolocation,
-          viewport: parsed.viewport,
+          viewport: parsed.viewport ?? deps.config.defaultViewport,
           proxyProfile: parsed.proxyProfile,
           proxy: parsed.proxy,
           geoMode: parsed.geoMode

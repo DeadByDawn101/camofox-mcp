@@ -62,7 +62,12 @@ Optional examples:
 CAMOFOX_TRANSPORT=http CAMOFOX_API_KEY=browser-server-key npx camofox-mcp@1.14.2
 CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_HOST=0.0.0.0 CAMOFOX_HTTP_API_KEY=replace-with-32-plus-random-chars npx camofox-mcp@1.14.2
 CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_PORT=8080 npx camofox-mcp@1.14.2
+CAMOFOX_VIEWPORT=1366x768 npx camofox-mcp@1.14.2
 ```
+
+`CAMOFOX_VIEWPORT` and `--viewport` set the default viewport for new tabs when
+`create_tab` does not provide an explicit `viewport`. Use `WIDTHxHEIGHT` format;
+width must be `320..3840` and height must be `240..2160`.
 
 ### 3) Configure OpenClaw
 

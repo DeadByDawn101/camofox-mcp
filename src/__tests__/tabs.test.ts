@@ -189,6 +189,44 @@ describe("tools/tabs", () => {
       expect(getTrackedTab("tab-proxy").sessionKey).toBe("reuse-key");
     });
 
+    it("uses configured default viewport when create_tab omits viewport", async () => {
+      deps.config.autoSave = false;
+      deps.config.defaultViewport = { width: 1440, height: 900 };
+      vi.mocked(deps.client.createTab).mockResolvedValue({ tabId: "tab-default-viewport", url: "http://example.com" });
+
+      const { server, getHandler } = makeServerCapture();
+      registerTabsTools(server as unknown as Parameters<typeof registerTabsTools>[0], deps);
+      const handler = getHandler("create_tab");
+
+      const result = await handler({ url: "http://example.com" });
+
+      expect(result.isError).toBeFalsy();
+      expect(deps.client.createTab).toHaveBeenCalledWith(
+        expect.objectContaining({
+          viewport: { width: 1440, height: 900 }
+        })
+      );
+    });
+
+    it("keeps explicit create_tab viewport above configured default viewport", async () => {
+      deps.config.autoSave = false;
+      deps.config.defaultViewport = { width: 1440, height: 900 };
+      vi.mocked(deps.client.createTab).mockResolvedValue({ tabId: "tab-explicit-viewport", url: "http://example.com" });
+
+      const { server, getHandler } = makeServerCapture();
+      registerTabsTools(server as unknown as Parameters<typeof registerTabsTools>[0], deps);
+      const handler = getHandler("create_tab");
+
+      const result = await handler({ url: "http://example.com", viewport: { width: 1366, height: 768 } });
+
+      expect(result.isError).toBeFalsy();
+      expect(deps.client.createTab).toHaveBeenCalledWith(
+        expect.objectContaining({
+          viewport: { width: 1366, height: 768 }
+        })
+      );
+    });
+
     it("create with auto-load succeeds (apiKey + autoSave)", async () => {
       deps.config.apiKey = "test-key";
       deps.config.autoSave = true;

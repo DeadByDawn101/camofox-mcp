@@ -76,6 +76,7 @@ These are the environment variables most users need first.
 | `CAMOFOX_DEFAULT_USER_ID` | `default` | No | Default user/session identifier for tab creation. |
 | `CAMOFOX_PROFILES_DIR` | `~/.camofox-mcp/profiles` | No | Directory used for saved session profiles. |
 | `CAMOFOX_AUTO_SAVE` | `true` | No | Enables best-effort auto-save and auto-load for profiles. |
+| `CAMOFOX_VIEWPORT` | none | No | Default viewport for new tabs in `WIDTHxHEIGHT` format, for example `1366x768`. Width must be `320..3840`; height must be `240..2160`. Explicit `create_tab.viewport` values override this default. |
 | `CAMOFOX_TRANSPORT` | `stdio` | No | Set to `http` for remote MCP transport. |
 | `CAMOFOX_HTTP_HOST` | `127.0.0.1` | No | Bind address for HTTP transport. |
 | `CAMOFOX_HTTP_PORT` | `3000` | No | Port for HTTP transport. |

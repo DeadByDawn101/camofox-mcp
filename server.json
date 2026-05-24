@@ -76,6 +76,11 @@
           "description": "Custom profiles directory for session persistence",
           "required": false,
           "default": "~/.camofox-mcp/profiles/"
+        },
+        {
+          "name": "CAMOFOX_VIEWPORT",
+          "description": "Default viewport size for new tabs in WIDTHxHEIGHT format (e.g., 1280x720). Width must be 320..3840 and height must be 240..2160.",
+          "required": false
         }
       ]
     }

@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- Added `CAMOFOX_VIEWPORT` / `--viewport` as a bounded default viewport for new tabs when `create_tab.viewport` is omitted.
+
+### Fixed
+- Ignored out-of-range configured default viewports instead of forwarding values outside the `create_tab` schema bounds.
+- Ignored non-positive numeric environment values for timeout, HTTP port, and HTTP rate limit, matching CLI validation behavior.
+- Treated `CAMOFOX_AUTO_SAVE=n` as false, matching CLI boolean parsing.
+
 ## [1.14.2] - 2026-05-23
 
 ### Compatibility

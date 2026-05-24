@@ -2,6 +2,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 import { type Config } from "./types.js";
+import { parseViewportString } from "./viewport.js";
 
 interface CliArgs {
   camofoxUrl?: string;
@@ -16,6 +17,7 @@ interface CliArgs {
   httpRateLimit?: number;
   httpApiKey?: string;
   httpAllowedHosts?: string[];
+  defaultViewport?: string;
 }
 
 function parseBoolFlag(raw: string): boolean | undefined {
@@ -27,7 +29,7 @@ function parseBoolFlag(raw: string): boolean | undefined {
 
 function isFalsy(val: string | undefined): boolean {
   if (!val) return false;
-  return ["false", "0", "no", "off"].includes(val.trim().toLowerCase());
+  return ["false", "0", "no", "n", "off"].includes(val.trim().toLowerCase());
 }
 
 function parseCsvList(raw: string | undefined): string[] | undefined {
@@ -37,6 +39,11 @@ function parseCsvList(raw: string | undefined): string[] | undefined {
     .map((value) => value.trim())
     .filter((value) => value.length > 0);
   return values.length > 0 ? values : undefined;
+}
+
+function parsePositiveInteger(raw: string | undefined): number | undefined {
+  const parsed = Number.parseInt(raw ?? "", 10);
+  return !Number.isNaN(parsed) && parsed > 0 ? parsed : undefined;
 }
 
 export function isLoopbackHost(host: string): boolean {
@@ -174,6 +181,12 @@ function parseCliArgs(argv: string[]): CliArgs {
       i += 1;
       continue;
     }
+
+    if (current === "--viewport" && next) {
+      args.defaultViewport = next;
+      i += 1;
+      continue;
+    }
   }
 
   return args;
@@ -181,10 +194,10 @@ function parseCliArgs(argv: string[]): CliArgs {
 
 export function loadConfig(argv = process.argv.slice(2), env = process.env): Config {
   const cli = parseCliArgs(argv);
-  const timeoutFromEnv = Number.parseInt(env.CAMOFOX_TIMEOUT ?? "", 10);
+  const timeoutFromEnv = parsePositiveInteger(env.CAMOFOX_TIMEOUT);
   const transportFromEnv = env.CAMOFOX_TRANSPORT?.trim().toLowerCase();
-  const httpPortFromEnv = Number.parseInt(env.CAMOFOX_HTTP_PORT ?? "", 10);
-  const httpRateLimitFromEnv = Number.parseInt(env.CAMOFOX_HTTP_RATE_LIMIT ?? "", 10);
+  const httpPortFromEnv = parsePositiveInteger(env.CAMOFOX_HTTP_PORT);
+  const httpRateLimitFromEnv = parsePositiveInteger(env.CAMOFOX_HTTP_RATE_LIMIT);
 
   const envTransport =
     transportFromEnv === "stdio" || transportFromEnv === "http" ? transportFromEnv : undefined;
@@ -194,14 +207,15 @@ export function loadConfig(argv = process.argv.slice(2), env = process.env): Con
     apiKey: cli.apiKey ?? env.CAMOFOX_API_KEY,
     defaultUserId: cli.defaultUserId ?? env.CAMOFOX_DEFAULT_USER_ID ?? "default",
     profilesDir: cli.profilesDir ?? env.CAMOFOX_PROFILES_DIR ?? join(homedir(), ".camofox-mcp", "profiles"),
-    timeout: cli.timeout ?? (Number.isNaN(timeoutFromEnv) ? 30_000 : timeoutFromEnv),
+    timeout: cli.timeout ?? timeoutFromEnv ?? 30_000,
     autoSave: cli.autoSave ?? !isFalsy(env.CAMOFOX_AUTO_SAVE),
     transport: cli.transport ?? envTransport ?? "stdio",
-    httpPort: cli.httpPort ?? (Number.isNaN(httpPortFromEnv) ? 3000 : httpPortFromEnv),
+    httpPort: cli.httpPort ?? httpPortFromEnv ?? 3000,
     httpHost: cli.httpHost ?? env.CAMOFOX_HTTP_HOST ?? "127.0.0.1",
-    httpRateLimit: cli.httpRateLimit ?? (Number.isNaN(httpRateLimitFromEnv) ? 60 : httpRateLimitFromEnv),
+    httpRateLimit: cli.httpRateLimit ?? httpRateLimitFromEnv ?? 60,
     httpApiKey: cli.httpApiKey ?? normalizeOptionalSecret(env.CAMOFOX_HTTP_API_KEY),
-    httpAllowedHosts: cli.httpAllowedHosts ?? parseCsvList(env.CAMOFOX_HTTP_ALLOWED_HOSTS)
+    httpAllowedHosts: cli.httpAllowedHosts ?? parseCsvList(env.CAMOFOX_HTTP_ALLOWED_HOSTS),
+    defaultViewport: parseViewportString(cli.defaultViewport ?? env.CAMOFOX_VIEWPORT)
   };
 
   assertHttpConfigSafe(config);

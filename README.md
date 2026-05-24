@@ -103,7 +103,7 @@ On a cold server with no active tabs yet, `browserConnected` can be `false`; cre
 
 - CamoFox MCP is not a standalone browser. You must run a compatible `camofox-browser` server separately.
 - MCP can share the camofox CLI default browser profile/context when `create_tab` uses `userId: "cli-default"` and `sessionKey: "default"`, but it cannot reliably attach to a tab the CLI already opened. Importing/adopting existing CLI tabs is a future feature.
-- Headed browser window size follows browser viewport/display-size behavior. Pass `viewport`, for example `{ "width": 1366, "height": 768 }`, when a narrower window is needed.
+- Headed browser window size follows browser viewport/display-size behavior. Pass `viewport`, for example `{ "width": 1366, "height": 768 }`, or set `CAMOFOX_VIEWPORT=1366x768` / `--viewport 1366x768` for a default new-tab size. Supported defaults use width `320..3840` and height `240..2160`.
 - Accessibility-tree refs are the primary interaction model, but SPA and custom-component sites can require CSS selectors or rendered HTML tools.
 - If the browser server enforces authentication, API-key-gated operations need the same `CAMOFOX_API_KEY` on both sides.
 - If HTTP transport is exposed beyond loopback, set `CAMOFOX_HTTP_API_KEY` and require clients to send it as a Bearer token.

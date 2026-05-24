@@ -2,6 +2,10 @@
 
 All notable changes to this ClawHub skill package will be documented in this file.
 
+## [Unreleased]
+
+- Documented `CAMOFOX_VIEWPORT` / `--viewport` default viewport configuration and bounds for new tabs.
+
 ## [1.14.2] - 2026-05-23
 
 - Updated package metadata from 1.14.1 to 1.14.2.
