@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.14.3] - 2026-05-24
 
 ### Added
 - Added `CAMOFOX_VIEWPORT` / `--viewport` as a bounded default viewport for new tabs when `create_tab.viewport` is omitted.

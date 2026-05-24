@@ -1,7 +1,7 @@
 ---
 name: skill
 title: CamoFox MCP for OpenClaw
-version: 1.14.2
+version: 1.14.3
 description: Anti-detection browser automation MCP skill for OpenClaw agents with 47 tools for navigation, interaction, observation, extraction, downloads, profiles, sessions, and stealth web search.
 author: redf0x1
 tags:
@@ -16,7 +16,7 @@ license: MIT
 homepage: https://github.com/redf0x1/camofox-mcp#readme
 metadata:
   title: CamoFox MCP for OpenClaw
-  version: 1.14.2
+version: 1.14.3
   author: redf0x1
   tags:
     - mcp
@@ -53,16 +53,16 @@ Use `camofox-browser` `2.4.4` or newer so the first opened tab reuses the browse
 ### 2) Start CamoFox MCP in HTTP mode
 
 ```bash
-CAMOFOX_TRANSPORT=http npx camofox-mcp@1.14.2
+CAMOFOX_TRANSPORT=http npx camofox-mcp@1.14.3
 ```
 
 Optional examples:
 
 ```bash
-CAMOFOX_TRANSPORT=http CAMOFOX_API_KEY=browser-server-key npx camofox-mcp@1.14.2
-CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_HOST=0.0.0.0 CAMOFOX_HTTP_API_KEY=replace-with-32-plus-random-chars npx camofox-mcp@1.14.2
-CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_PORT=8080 npx camofox-mcp@1.14.2
-CAMOFOX_VIEWPORT=1366x768 npx camofox-mcp@1.14.2
+CAMOFOX_TRANSPORT=http CAMOFOX_API_KEY=browser-server-key npx camofox-mcp@1.14.3
+CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_HOST=0.0.0.0 CAMOFOX_HTTP_API_KEY=replace-with-32-plus-random-chars npx camofox-mcp@1.14.3
+CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_PORT=8080 npx camofox-mcp@1.14.3
+CAMOFOX_VIEWPORT=1366x768 npx camofox-mcp@1.14.3
 ```
 
 `CAMOFOX_VIEWPORT` and `--viewport` set the default viewport for new tabs when
