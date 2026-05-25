@@ -1,7 +1,7 @@
 ---
 name: skill
 title: CamoFox MCP for OpenClaw
-version: 1.14.3
+version: 1.14.4
 description: Anti-detection browser automation MCP skill for OpenClaw agents with 47 tools for navigation, interaction, observation, extraction, downloads, profiles, sessions, and stealth web search.
 author: redf0x1
 tags:
@@ -16,7 +16,7 @@ license: MIT
 homepage: https://github.com/redf0x1/camofox-mcp#readme
 metadata:
   title: CamoFox MCP for OpenClaw
-version: 1.14.3
+version: 1.14.4
   author: redf0x1
   tags:
     - mcp
@@ -48,22 +48,26 @@ Most browser automation flows eventually hit CAPTCHAs, fingerprint checks, or bo
 ### 1) Start CamoFox Browser
 
 CamoFox Browser must be running first (default `http://localhost:9377`).
-Use `camofox-browser` `2.4.4` or newer so the first opened tab reuses the browser's initial blank page instead of leaving an extra empty window.
+Use `camofox-browser` `2.4.5` or newer for explicit browser auth modes. Browser `2.4.4` or newer also ensures the first opened tab reuses the browser's initial blank page instead of leaving an extra empty window.
 
 ### 2) Start CamoFox MCP in HTTP mode
 
 ```bash
-CAMOFOX_TRANSPORT=http npx camofox-mcp@1.14.3
+CAMOFOX_TRANSPORT=http npx camofox-mcp@1.14.4
 ```
 
 Optional examples:
 
 ```bash
-CAMOFOX_TRANSPORT=http CAMOFOX_API_KEY=browser-server-key npx camofox-mcp@1.14.3
-CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_HOST=0.0.0.0 CAMOFOX_HTTP_API_KEY=replace-with-32-plus-random-chars npx camofox-mcp@1.14.3
-CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_PORT=8080 npx camofox-mcp@1.14.3
-CAMOFOX_VIEWPORT=1366x768 npx camofox-mcp@1.14.3
+CAMOFOX_TRANSPORT=http CAMOFOX_API_KEY=browser-server-key npx camofox-mcp@1.14.4
+CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_HOST=0.0.0.0 CAMOFOX_HTTP_API_KEY=replace-with-32-plus-random-chars npx camofox-mcp@1.14.4
+CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_PORT=8080 npx camofox-mcp@1.14.4
+CAMOFOX_VIEWPORT=1366x768 npx camofox-mcp@1.14.4
 ```
+
+For browser `CAMOFOX_AUTH_MODE=disabled` on a trusted private agent network,
+leave `CAMOFOX_API_KEY` unset in CamoFox MCP so it sends no browser auth
+headers. Keep that browser endpoint private.
 
 `CAMOFOX_VIEWPORT` and `--viewport` set the default viewport for new tabs when
 `create_tab` does not provide an explicit `viewport`. Use `WIDTHxHEIGHT` format;

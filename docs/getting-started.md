@@ -6,9 +6,9 @@ Use this guide to install CamoFox MCP, connect it to `camofox-browser`, verify t
 
 - Node.js 18 or newer for `npx` and local development.
 - Docker if you prefer container-based setup.
-- A running `camofox-browser` server. Use `camofox-browser` `2.4.4` or newer so the first opened tab reuses the browser's initial blank page instead of leaving an extra empty window.
+- A running `camofox-browser` server. Use `camofox-browser` `2.4.5` or newer for explicit browser auth modes; browser `2.4.4` or newer also fixes first-tab reuse for persistent contexts.
 - An MCP-compatible client such as Claude Desktop, VS Code, Cursor, or OpenClaw.
-- `CAMOFOX_API_KEY` only if your browser server is configured to require authentication.
+- `CAMOFOX_API_KEY` only if your browser server is configured to require authentication. Leave it unset when browser `2.4.5` runs with `CAMOFOX_AUTH_MODE=disabled`.
 
 ## Installation Methods
 
@@ -71,7 +71,7 @@ These are the environment variables most users need first.
 | Variable | Default | Required | Notes |
 |---|---|---|---|
 | `CAMOFOX_URL` | `http://localhost:9377` | Yes | Base URL for the `camofox-browser` server. |
-| `CAMOFOX_API_KEY` | none | No | Required only when the browser server enforces authentication. |
+| `CAMOFOX_API_KEY` | none | No | Outbound browser-server API key. Required only when the browser server enforces authentication; leave unset for browser `CAMOFOX_AUTH_MODE=disabled`. |
 | `CAMOFOX_TIMEOUT` | `30000` | No | Request timeout in milliseconds. |
 | `CAMOFOX_DEFAULT_USER_ID` | `default` | No | Default user/session identifier for tab creation. |
 | `CAMOFOX_PROFILES_DIR` | `~/.camofox-mcp/profiles` | No | Directory used for saved session profiles. |
@@ -153,6 +153,8 @@ This shares the browser context/profile, but it does not reliably attach MCP to 
 ```
 
 If your browser server requires authentication, add `CAMOFOX_API_KEY` to the `env` block in both the browser server and the MCP client. This is separate from `CAMOFOX_HTTP_API_KEY`, which protects inbound HTTP MCP clients.
+
+For `camofox-browser` `2.4.5` trusted private agent networks where clients cannot send browser bearer tokens, run the browser server with `CAMOFOX_AUTH_MODE=disabled` and leave `CAMOFOX_API_KEY` unset in CamoFox MCP. CamoFox MCP will send no outbound browser auth headers in that setup. Keep the browser endpoint on a trusted private network and do not expose it to untrusted clients.
 
 ## Verify Setup
 

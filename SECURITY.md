@@ -30,4 +30,5 @@ CamoFox MCP exposes browser-control tools to MCP clients. Treat HTTP transport a
 - keep HTTP transport bound to loopback unless a remote MCP client requires network access
 - set `CAMOFOX_HTTP_API_KEY` for inbound HTTP MCP clients when binding beyond loopback
 - set `CAMOFOX_API_KEY` separately when the CamoFox Browser server requires authentication
+- only use browser `CAMOFOX_AUTH_MODE=disabled` on trusted private networks, and leave `CAMOFOX_API_KEY` unset in CamoFox MCP for that mode
 - protect saved profiles because they can contain sensitive cookies

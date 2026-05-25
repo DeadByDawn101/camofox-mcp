@@ -30,6 +30,10 @@ CAMOFOX_TRANSPORT=http npx camofox-mcp
 # Browser-server API key authentication
 CAMOFOX_TRANSPORT=http CAMOFOX_API_KEY=browser-server-key npx camofox-mcp
 
+# Trusted private browser network with camofox-browser 2.4.5 disabled auth:
+# start the browser with CAMOFOX_AUTH_MODE=disabled and leave CAMOFOX_API_KEY unset here.
+CAMOFOX_TRANSPORT=http npx camofox-mcp
+
 # Inbound HTTP MCP authentication when binding beyond loopback
 CAMOFOX_TRANSPORT=http CAMOFOX_HTTP_HOST=0.0.0.0 CAMOFOX_HTTP_API_KEY=replace-with-32-plus-random-chars npx camofox-mcp
 
@@ -130,6 +134,7 @@ CamoFox MCP provides 47 browser automation tools:
 - HTTP mode binds to `127.0.0.1` by default (localhost only)
 - Use `CAMOFOX_HTTP_API_KEY` for inbound HTTP MCP client authentication when exposing beyond loopback
 - Use `CAMOFOX_API_KEY` for CamoFox Browser authentication
+- For browser `CAMOFOX_AUTH_MODE=disabled`, leave `CAMOFOX_API_KEY` unset and keep the browser endpoint on a trusted private network
 - Rate limiting protects against abuse (60 req/min default)
 - DNS rebinding protection enabled via MCP SDK
 - For network exposure (`0.0.0.0`), set `CAMOFOX_HTTP_API_KEY`, configure firewall rules, and optionally set `CAMOFOX_HTTP_ALLOWED_HOSTS`

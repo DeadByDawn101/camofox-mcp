@@ -71,7 +71,7 @@ Full client configuration examples live in [docs/getting-started.md](docs/gettin
 
 ## Quick Verify
 
-Use `camofox-browser` `2.4.4` or newer. That browser release fixes the persistent-context cold-start `about:blank` page reuse path, so opening the first tab should not leave an extra empty window.
+Use `camofox-browser` `2.4.5` or newer. Browser `2.4.4` fixes the persistent-context cold-start `about:blank` page reuse path, and browser `2.4.5` adds explicit browser auth modes including `CAMOFOX_AUTH_MODE=disabled` for trusted private agent networks.
 
 Verify the browser server is reachable:
 
@@ -106,12 +106,13 @@ On a cold server with no active tabs yet, `browserConnected` can be `false`; cre
 - Headed browser window size follows browser viewport/display-size behavior. Pass `viewport`, for example `{ "width": 1366, "height": 768 }`, or set `CAMOFOX_VIEWPORT=1366x768` / `--viewport 1366x768` for a default new-tab size. Supported defaults use width `320..3840` and height `240..2160`.
 - Accessibility-tree refs are the primary interaction model, but SPA and custom-component sites can require CSS selectors or rendered HTML tools.
 - If the browser server enforces authentication, API-key-gated operations need the same `CAMOFOX_API_KEY` on both sides.
+- For browser `2.4.5` trusted private-network deployments using `CAMOFOX_AUTH_MODE=disabled`, leave `CAMOFOX_API_KEY` unset in CamoFox MCP. MCP then sends no outbound browser auth headers. Keep both browser and MCP access on a trusted private network.
 - If HTTP transport is exposed beyond loopback, set `CAMOFOX_HTTP_API_KEY` and require clients to send it as a Bearer token.
 - HTTP transport is mainly for remote MCP clients. Desktop MCP clients usually work best with stdio configuration.
 
 ## Security
 
-Treat this as a browser control surface. In shared or networked environments, isolate the browser server, avoid exposing MCP endpoints broadly, and use `CAMOFOX_HTTP_API_KEY` for inbound HTTP MCP clients plus `CAMOFOX_API_KEY` when the browser server requires authentication. Session profiles can contain sensitive cookies and should be stored accordingly.
+Treat this as a browser control surface. In shared or networked environments, isolate the browser server, avoid exposing MCP endpoints broadly, and use `CAMOFOX_HTTP_API_KEY` for inbound HTTP MCP clients plus `CAMOFOX_API_KEY` when the browser server requires authentication. If the browser server runs `CAMOFOX_AUTH_MODE=disabled`, leave `CAMOFOX_API_KEY` unset and keep that browser endpoint on a trusted private network. Session profiles can contain sensitive cookies and should be stored accordingly.
 
 ## Documentation
 

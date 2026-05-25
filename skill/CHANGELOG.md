@@ -2,6 +2,11 @@
 
 All notable changes to this ClawHub skill package will be documented in this file.
 
+## [1.14.4] - 2026-05-25
+
+- Updated package metadata from 1.14.3 to 1.14.4.
+- Documented browser `CAMOFOX_AUTH_MODE=disabled` compatibility for trusted private networks where CamoFox MCP leaves `CAMOFOX_API_KEY` unset.
+
 ## [1.14.3] - 2026-05-24
 
 - Documented `CAMOFOX_VIEWPORT` / `--viewport` default viewport configuration and bounds for new tabs.

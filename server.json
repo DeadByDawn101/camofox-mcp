@@ -7,15 +7,15 @@
     "source": "github"
   },
   "version_detail": {
-    "version": "1.14.3",
-    "release_date": "2026-05-24",
+    "version": "1.14.4",
+    "release_date": "2026-05-25",
     "is_stable": true
   },
   "packages": [
     {
       "registry_name": "npm",
       "name": "camofox-mcp",
-      "version": "1.14.3",
+      "version": "1.14.4",
       "runtime": "node",
       "runtime_arguments": [],
       "package_arguments": [],
@@ -34,7 +34,7 @@
         },
         {
           "name": "CAMOFOX_API_KEY",
-          "description": "Optional API key for authentication",
+          "description": "Optional outbound CamoFox Browser API key; leave unset when browser CAMOFOX_AUTH_MODE=disabled is used on a trusted private network",
           "required": false
         },
         {

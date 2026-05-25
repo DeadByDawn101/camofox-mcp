@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.4] - 2026-05-25
+
+### Compatibility
+- Documented `camofox-browser` `2.4.5` browser auth modes, including the trusted private-network `CAMOFOX_AUTH_MODE=disabled` setup where CamoFox MCP must leave `CAMOFOX_API_KEY` unset.
+
+### Changed
+- Clarified outbound browser authentication (`CAMOFOX_API_KEY`) versus inbound HTTP MCP authentication (`CAMOFOX_HTTP_API_KEY`) across package-facing docs.
+
 ## [1.14.3] - 2026-05-24
 
 ### Added
